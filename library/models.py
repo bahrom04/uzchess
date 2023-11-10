@@ -6,13 +6,6 @@ LEVEL_CHOICES = (
     ('Amateur', 'Amateur'),
     ('Professional', 'Professional'),    
 )
-RATING_CHOICES = (
-    ('1', '1'),
-    ('2', '2'),
-    ('3', '3'),
-    ('4', '4'),
-    ('5', '5'),
-)
 
 
 class Author(models.Model):
@@ -54,10 +47,11 @@ class Book(models.Model):
 
     category = models.ForeignKey(BookCategory, on_delete=models.CASCADE)
     is_favourite = models.BooleanField(default=False)
+    is_top = models.BooleanField(default=False)
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     level = models.CharField(max_length=20, choices=LEVEL_CHOICES)
-    rating = models.CharField(max_length=1, choices=RATING_CHOICES)
+    rating = models.FloatField(default=0.0)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
