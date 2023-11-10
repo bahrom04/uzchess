@@ -13,18 +13,11 @@ class Socials(models.Model):
         return self.title
     
 
-class ShareButton(models.Model):
-    title = models.CharField(max_length=255)
-    
-
 class News(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='static/news_images/')
     content = models.TextField()
     views = models.IntegerField(default=0)
-
-    socials = models.ManyToManyField(Socials)
-    share_button = models.ManyToManyField(ShareButton)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
