@@ -1,4 +1,6 @@
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
+
 
 # Social media links
 class Socials(models.Model):
@@ -16,7 +18,7 @@ class Socials(models.Model):
 class News(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='static/news_images/')
-    content = models.TextField()
+    content = RichTextUploadingField()
     views = models.IntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)

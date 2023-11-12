@@ -24,17 +24,12 @@ class User(models.Model):
         return self.username
     
 
-class FavouriteBook(models.Model):
+class Favourite(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
     book = models.ForeignKey(Book, on_delete=models.PROTECT, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.user.username} - liked books"
-
-
-class FavouriteCource(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - liked cources"
+        return f"{self.user.username} - favourite "
+
+

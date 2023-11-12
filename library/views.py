@@ -24,7 +24,8 @@ class BookView(generics.ListAPIView):
 
 
 class TopBooksView(generics.ListAPIView):
-    queryset = Book.objects.all().filter(is_Top=True)
+    # get top books
+    queryset = Book.objects.filter(is_top=True)
     serializer_class = BookSerializer
     # use api/topbooks/?size='YOUR_SIZE' 
     pagination_class = CustomPageNumberPagination
