@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 LEVEL_CHOICES = (
@@ -40,7 +41,7 @@ class BookCategory(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='static/library_images/')
-    description = models.TextField()
+    description = RichTextUploadingField()
     price = models.IntegerField()
     published_date = models.DateTimeField()
     total_pages = models.IntegerField()

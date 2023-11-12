@@ -1,5 +1,9 @@
 from django.db import models
+from user.models import User
 
+'''
+task: import BaseModel From common/models.py instead of models.Model
+'''
 
 DIFFICULTY_LEVEL = (
     ('Beginner', 'Beginner'),
@@ -8,27 +12,29 @@ DIFFICULTY_LEVEL = (
 )
 
 
-class MainSubClass(models.Model):
-    # get class number by id:
-    # example day 1. Asosiy donalar -> id=1 
+class Chapter(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
+
+    class Meta:
+        verbose_name = 'Chapter'
+        verbose_name_plural = 'Chapters'
 
     def __str__(self):
         return self.title
 
 
-class SubClass(models.Model):
-    # example: 1.1
-    class_number = models.FloatField()
+# Video Lessons
+class Lesson(models.Model):
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+
     title = models.CharField(max_length=255)
     description = models.TextField()
-    video = models.FileField(upload_to='static/course-class_videos/')
-    status = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    video_path = models.FileField(upload_to='static/course-class_videos/')
 
-    belongs_to = models.ForeignKey(MainSubClass, on_delete=models.CASCADE)
-
+    class Meta:
+        verbose_name = 'Lesson'
+        verbose_name_plural = 'Lessons'
 
     def __str__(self):
         return self.title
@@ -38,18 +44,16 @@ class Course(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='static/courses_images/')
     price = models.IntegerField()
-    total_chapters = models.IntegerField()
-    total_classes = models.IntegerField()
-    rating = models.FloatField(default=0.0)
+    # total_chapters = models.IntegerField()
+    # total_classes = models.IntegerField()
+    # rating = models.FloatField(default=0.0)
     lavel = models.CharField(max_length=20, choices=DIFFICULTY_LEVEL)
-
-    main_sub_class = models.ForeignKey(MainSubClass, on_delete=models.CASCADE)
 
     discount = models.IntegerField(default=0)
     is_purchased = models.BooleanField(default=False)
     is_saved = models.BooleanField(default=False)
+    # is_free = models.BooleanField(default=False) not used yet
 
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Course'
@@ -59,13 +63,35 @@ class Course(models.Model):
         return self.title
     
 
-class Comment(models.Model):
-    # owner from user
-    title = models.TextField()
-    rating = models.FloatField()
-    is_complained = models.BooleanField(default=False)
-    created_at = models.DateTimeField()
+# User progress
+class UserLessonRewiew(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vieo_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    last_watched = models.DateTimeField(blank=True, null=True)
+    is_finished = models.BooleanField(default=False)
 
-    belongs_to = models.ForeignKey(Course, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = 'UserRewiew'
+        verbose_name_plural = 'UserRewiews'
+
     def __str__(self):
-        return self.title
+        return f"{self.user.username} - {self.vieo_lesson.title}"
+
+
+class CourceComment(models.Model):
+    # task: create custom user
+    # author = models.ForeignKey(
+    #     CustomUser, on_delete=models.CASCADE, related_name="coursecomment_author", verbose_name=_("Author")
+    #                            )
+    rating = models.PositiveSmallIntegerField()
+    title = models.TextField()
+    is_complained = models.BooleanField(default=False)
+
+    cource = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'CourceComment'
+        verbose_name_plural = 'CourceComments'
+        
+    def __str__(self):
+        return f"{self.cource.title} - rating:{self.title}"
