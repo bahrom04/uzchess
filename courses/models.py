@@ -1,5 +1,5 @@
 from django.db import models
-from user.models import User
+from django.contrib.auth.models import User
 
 '''
 task: import BaseModel From common/models.py instead of models.Model
@@ -41,18 +41,13 @@ class Lesson(models.Model):
     
 
 class Course(models.Model):
-    title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='static/courses_images/')
-    price = models.IntegerField()
-    # total_chapters = models.IntegerField()
-    # total_classes = models.IntegerField()
-    # rating = models.FloatField(default=0.0)
-    lavel = models.CharField(max_length=20, choices=DIFFICULTY_LEVEL)
-
-    discount = models.IntegerField(default=0)
+    title        = models.CharField(max_length=255)
+    image        = models.ImageField(upload_to='static/courses_images/')
+    price        = models.IntegerField()
+    lavel        = models.CharField(max_length=20, choices=DIFFICULTY_LEVEL)
+    discount     = models.IntegerField(default=0)
     is_purchased = models.BooleanField(default=False)
-    is_saved = models.BooleanField(default=False)
-    # is_free = models.BooleanField(default=False) not used yet
+    is_saved     = models.BooleanField(default=False)
 
 
     class Meta:
@@ -79,12 +74,8 @@ class UserLessonRewiew(models.Model):
 
 
 class CourceComment(models.Model):
-    # task: create custom user
-    # author = models.ForeignKey(
-    #     CustomUser, on_delete=models.CASCADE, related_name="coursecomment_author", verbose_name=_("Author")
-    #                            )
-    rating = models.PositiveSmallIntegerField()
-    title = models.TextField()
+    rating        = models.PositiveSmallIntegerField()
+    title         = models.TextField()
     is_complained = models.BooleanField(default=False)
 
     cource = models.ForeignKey(Course, on_delete=models.CASCADE)

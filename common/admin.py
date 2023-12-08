@@ -1,3 +1,9 @@
 from django.contrib import admin
+from common.models import Favourite
 
-# Register your models here.
+
+class FavouriteAdmin:
+    pass
+
+
+admin.site.register(Favourite)

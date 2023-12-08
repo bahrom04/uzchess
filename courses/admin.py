@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import MainSubClass, SubClass, Comment, Course
+from .models import Chapter, Lesson, Course, UserLessonRewiew, CourceComment
 
 # task:change new models name
-admin.site.register(MainSubClass)
-admin.site.register(SubClass)
-admin.site.register(Comment)
+admin.site.register(Chapter)
+admin.site.register(Lesson)
 admin.site.register(Course)
+admin.site.register(UserLessonRewiew)
+admin.site.register(CourceComment)
 
