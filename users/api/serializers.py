@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from uzchess_clone.users.models import User as UserType
-
+from users.models import User as UserType
 
 User = get_user_model()
 

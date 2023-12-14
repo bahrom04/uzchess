@@ -1,8 +1,8 @@
 import pytest
 from rest_framework.test import APIRequestFactory
 
-from uzchess_clone.users.api.views import UserViewSet
-from uzchess_clone.users.models import User
+from users.api.views import UserViewSet
+from users.models import User
 
 
 class TestUserViewSet:

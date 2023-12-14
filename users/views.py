@@ -4,9 +4,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, RedirectView, UpdateView
-from rest_framework import generics, permissions
-from users.serializers import UserListSerializer
-
 
 User = get_user_model()
 
@@ -44,10 +41,3 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 
 user_redirect_view = UserRedirectView.as_view()
-
-
-class UserListApi(generics.RetrieveUpdateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserListSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-

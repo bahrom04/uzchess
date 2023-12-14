@@ -6,12 +6,13 @@ from common.models import BaseModel
 # Social media links
 class Socials(BaseModel):
     title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='static/socials/')
+    image = models.ImageField(upload_to='static/socials/', blank=True)
     
     class Meta:
         verbose_name = 'Social'
         verbose_name_plural = 'Socials'
 
+    
     def __str__(self):
         return self.title
     

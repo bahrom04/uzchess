@@ -9,14 +9,10 @@ from django.test import RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from uzchess_clone.users.forms import UserAdminChangeForm
-from uzchess_clone.users.models import User
-from uzchess_clone.users.tests.factories import UserFactory
-from uzchess_clone.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from users.forms import UserAdminChangeForm
+from users.models import User
+from users.tests.factories import UserFactory
+from users.views import UserRedirectView, UserUpdateView, user_detail_view
 
 pytestmark = pytest.mark.django_db
 

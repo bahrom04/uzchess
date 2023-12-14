@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from uzchess_clone.users.models import User
+from users.models import User
 
 
 class TestUserAdmin:
