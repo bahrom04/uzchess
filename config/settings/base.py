@@ -92,7 +92,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "uzchess_clone.users",
     # Your stuff: custom apps go here
-    'news'
+    'news.apps.NewsConfig'
+    'courses.apps.CourceConfig'
 
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -289,7 +290,7 @@ SOCIALACCOUNT_FORMS = {"signup": "uzchess_clone.users.forms.UserSocialSignupForm
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
 
@@ -316,3 +317,16 @@ SPECTACULAR_SETTINGS = {
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://9574d8a51d1e9901426cb9810e3bb192@o4506380791644160.ingest.sentry.io/4506380793020416",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
