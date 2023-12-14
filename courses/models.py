@@ -1,7 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from common.models import BaseModel
+
+User = get_user_model()
 
 
 class Course(BaseModel):
@@ -98,7 +100,7 @@ class UserLessonRewiew(models.Model):
 
 
 class CourseComment(models.Model):
-    rating        = models.DecimalField(decimal_places=1)
+    rating        = models.DecimalField(decimal_places=1, max_digits=2)
     title         = models.TextField()
     
     user          = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -110,4 +112,4 @@ class CourseComment(models.Model):
         
     @property
     def user_comment_info(self):
-        return f"{self.user} comment on {self.cource}"
+        return f"{self.user.username} comment on {self.cource}"
