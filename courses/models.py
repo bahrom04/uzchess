@@ -17,11 +17,11 @@ class Course(BaseModel):
     title        = models.CharField(max_length=255)
     image        = models.ImageField(upload_to='uzchess_clone/static/courses_images/', blank=True)
     lavel        = models.CharField(max_length=32, choices=DIFFICULTY_LEVEL)
-
     price        = models.PositiveIntegerField(default=0)
     discount     = models.PositiveIntegerField()
 
     is_saved     = models.BooleanField(default=False)
+
     slug         = models.SlugField(unique=True, blank=True)
 
     class Meta:
@@ -30,6 +30,9 @@ class Course(BaseModel):
 
     def __str__(self):
         return self.title
+    
+    def is_course_saved(self):
+        return self.user_lesson.is_saved if True else False
     
     def is_discount(self):
         return False if self.price==0 else True
@@ -54,11 +57,11 @@ class Course(BaseModel):
         super(Course, self).save(*args, **kwargs)
 
 
-class Chapter(BaseModel):
+class CourseChapter(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='chapter')
 
     class Meta:
         verbose_name = 'Chapter'
@@ -69,8 +72,8 @@ class Chapter(BaseModel):
 
 
 # Video Lessons
-class Lesson(BaseModel):
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+class CourseLesson(BaseModel):
+    chapter = models.ForeignKey(CourseChapter, on_delete=models.CASCADE, related_name='lesson')
 
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -96,7 +99,7 @@ class UserLessonRewiew(models.Model):
 
     @property
     def user_lesson(self):
-        return f"{self.user.username} - {self.course.title}"
+        return f"{self.user.get_username()} - {self.course.title}"
 
 
 class CourseComment(models.Model):
@@ -104,7 +107,7 @@ class CourseComment(models.Model):
     title         = models.TextField()
     
     user          = models.ForeignKey(User, on_delete=models.CASCADE)
-    cource        = models.ForeignKey(Course, on_delete=models.CASCADE)
+    cource        = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='comment')
 
     class Meta:
         verbose_name = 'CourceComment'
@@ -112,4 +115,4 @@ class CourseComment(models.Model):
         
     @property
     def user_comment_info(self):
-        return f"{self.user.username} comment on {self.cource}"
+        return f"{self.user.get_username()} comment on {self.cource}"

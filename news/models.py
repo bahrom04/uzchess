@@ -1,12 +1,13 @@
 from django.db import models
 # from ckeditor_uploader.fields import RichTextUploadingField
 from common.models import BaseModel
+from sorl.thumbnail import ImageField
 
 
 # Social media links
 class Socials(BaseModel):
     title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='static/socials/', blank=True)
+    image = ImageField(upload_to='static/socials/', blank=True)
     
     class Meta:
         verbose_name = 'Social'

@@ -1,12 +1,18 @@
 from .serializers import NewsSerializer, SocialsSerializer
 from .models import News, Socials
 from rest_framework import generics
+from django.shortcuts import render
 
+
+# def indexx(request):
+#     item = Socials.objects.all()
+#     return HttpResponse('index.html', item=item)
 
 class SocialView(generics.ListAPIView):
     queryset = Socials.objects.all()
     serializer_class = SocialsSerializer
     
+ 
 class NewsListView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer 
