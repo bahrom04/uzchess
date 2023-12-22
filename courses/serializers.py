@@ -22,3 +22,9 @@ class CourseCreateUpdateDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ("title", "image", "lavel", "discount", "category")
+
+    # def validate(self, request):
+    #     """
+    #     Validate admin user
+    #     """
+    #     if request.user.IsAdminUser():
