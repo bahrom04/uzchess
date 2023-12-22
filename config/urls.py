@@ -10,19 +10,15 @@ from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
-    
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-
     # path('api/v1/drf-auth/', include('rest_framework.urls')),
     # path('api/v1/auth/', include('djoser.urls')),
     # re_path(r'^auth/', include('djoser.urls.authtoken')),
-
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS
@@ -37,8 +33,8 @@ urlpatterns += [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
-    path('course/', include("courses.urls")),
-    path('news/', include("news.urls")),
+    path("course/", include("courses.urls")),
+    path("news/", include("news.urls")),
 ]
 
 if settings.DEBUG:
@@ -70,11 +66,11 @@ if settings.DEBUG:
 
 import requests
 
+
 def trigger_error(request):
     division_by_zero = 1 / 0
 
 
-urlpatterns +=[
-    path('sentry-debug/', trigger_error),
-
+urlpatterns += [
+    path("sentry-debug/", trigger_error),
 ]
