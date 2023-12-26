@@ -1,43 +1,75 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, RedirectView, UpdateView
+from rest_framework import generics, status, views
+from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from users import models
+
 
 User = get_user_model()
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
-    model = User
-    slug_field = "username"
-    slug_url_kwarg = "username"
-
-
-user_detail_view = UserDetailView.as_view()
-
-
-class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = User
-    fields = ["name"]
-    success_message = _("Information successfully updated")
-
-    def get_success_url(self):
-        assert self.request.user.is_authenticated  # for mypy to know that the user is authenticated
-        return self.request.user.get_absolute_url()
+class UserUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserShortSerializer
+    permission_classes = (IsAdmin | IsShopOwner,)
 
     def get_object(self):
         return self.request.user
 
 
-user_update_view = UserUpdateView.as_view()
+class ProfileAPIView(generics.RetrieveAPIView):
+    serializer_class = serializers.ProfileSerializer
+    queryset = User.objects.all()
+    lookup_field = "username"
 
 
-class UserRedirectView(LoginRequiredMixin, RedirectView):
-    permanent = False
+class PhoneRecoveryAPIView(generics.CreateAPIView):
+    queryset = models.User.objects.all()
+    serializer_class = serializers.PhoneRecoverySerializer
+    permission_classes = [AllowAny]
 
-    def get_redirect_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+
+class RecoveryVerifyAPIView(generics.CreateAPIView):
+    queryset = models.User.objects.all()
+    serializer_class = serializers.RecoveryVerifySerializer
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        pass
 
 
-user_redirect_view = UserRedirectView.as_view()
+class UserListAPIView(generics.ListCreateAPIView):
+    queryset = models.User.objects.all()
+    serializer_class = serializers.UserSerializer
+    permission_classes = (IsAdmin,)
+
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.User.objects.all()
+    serializer_class = serializers.UserSerializer
+    permission_classes = (IsAdmin,)
+
+
+class ClientListAPIView(FilterByPermission, generics.ListCreateAPIView):
+    queryset = models.Client.objects.all()
+    serializer_class = serializers.ClientSerializer
+    search_fields = ("name", "phone_number")
+    permission_classes = (IsAdmin | IsShopOwner,)
+
+
+class ClientDetailView(FilterByPermission, generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Client.objects.all()
+    serializer_class = serializers.ClientSerializer
+    permission_classes = (IsAdmin | IsShopOwner,)
+
+
+class ShopListAPIView(FilterByPermission, generics.ListCreateAPIView):
+    queryset = models.Shop.objects.all()
+    serializer_class = serializers.ShopSerializer
+
+
+class ShopDetailView(FilterByPermission, generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Shop.objects.all()
+    serializer_class = serializers.ShopSerializer
+    permission_classes = (IsAdmin | IsShopOwner,)

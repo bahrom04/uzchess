@@ -5,15 +5,10 @@ from rest_framework.views import APIView
 
 class CustomAccessPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView):
-        # admin_methods = ("POST","DELETE")
-
         if request.method == "GET":
             return True
 
-        elif request.method == "POST":
-            return request.user and IsAdminUser().has_permission(request, view)
-
-        elif request.method == "DELETE":
+        elif request.method == "POST" or request.method == "DELETE" or request.method == "UPDATE":
             return request.user and IsAdminUser().has_permission(request, view)
 
         else:

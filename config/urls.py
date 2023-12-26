@@ -15,10 +15,6 @@ urlpatterns = [
     # User management
     path("users/", include("users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
-    # path('api/v1/drf-auth/', include('rest_framework.urls')),
-    # path('api/v1/auth/', include('djoser.urls')),
-    # re_path(r'^auth/', include('djoser.urls.authtoken')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS
@@ -64,13 +60,13 @@ if settings.DEBUG:
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
 
 
-import requests
+# import requests
 
 
-def trigger_error(request):
-    division_by_zero = 1 / 0
+# def trigger_error(request):
+#     division_by_zero = 1 / 0
 
 
-urlpatterns += [
-    path("sentry-debug/", trigger_error),
-]
+# urlpatterns += [
+#     path("sentry-debug/", trigger_error),
+# ]

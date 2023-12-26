@@ -14,3 +14,7 @@ class UserSerializer(serializers.ModelSerializer[UserType]):
         extra_kwargs = {
             "url": {"view_name": "api:user-detail", "lookup_field": "username"},
         }
+
+class UserLoginSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(required=True)
+    

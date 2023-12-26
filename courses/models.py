@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 from common.models import BaseModel
 
 User = get_user_model()
@@ -11,24 +12,27 @@ class Category(BaseModel):
 
 
 class Course(BaseModel):
-    class Difficulty_lavel(models.TextChoices):
-        Beginner = "Beginner", "Beginner"
-        Amateur = "Amateur", "Beginner"
-
-    class Language(models.TextChoices):
-        Uzbek = "Uz", "uz"
-        English = "Eng", "eng"
-        Russian = "Ru", "ru"
+    LEVEL = (
+        ("beginner", "Beginner"),
+        ("intermediate", "Intermediate"),
+        ("advanced", "Advanced"),
+    )
+    LANGUAGES = (
+        ("uz", "O`zbek tili"),
+        ("en", "Ingliz tili"),
+        ("ru", "Rus tili"),
+    )
 
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to="uzchess_clone/static/courses_images/", blank=True)
-    lavel = models.CharField(max_length=32, choices=Difficulty_lavel.choices)
     price = models.PositiveIntegerField(default=0)
     discount = models.PositiveIntegerField()
+    lavel = models.CharField(max_length=32, choices=LEVEL)
+    language = models.CharField(max_length=32, choices=LANGUAGES)
 
     is_saved = models.BooleanField(default=False)
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="course")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True)
 
     slug = models.SlugField(unique=True, blank=True)
 
@@ -96,10 +100,12 @@ class CourseLesson(BaseModel):
 
 
 # User progress
-class UserLessonRewiew(models.Model):
+class UserLessonRewiew(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="user_lesson")
     is_active = models.BooleanField(default=True)
+    # Course yakunlanganda True booladi
+    # is_finished = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "UserRewiew"
@@ -110,12 +116,12 @@ class UserLessonRewiew(models.Model):
         return f"{self.user.get_username()} - {self.course.title}"
 
 
-class CourseComment(models.Model):
+class CourseComment(BaseModel):
     rating = models.DecimalField(decimal_places=1, max_digits=2)
     title = models.TextField()
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cource = models.ManyToManyField(Course, blank=False, related_name="comment")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=False, related_name="comment")
 
     class Meta:
         verbose_name = "CourceComment"
